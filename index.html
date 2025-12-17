@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <title>searchbar</title>
+</head>
+<header>
+    <button onclick="$('.settings').toggleClass('settings-showing')"><span>Settings</span></button>
+    <ul class="settings">
+        <li><p>automatically search?<gap/><input id="autosearch" type="checkbox"></p></li>
+    </ul>
+</header>
+<body>
+    <div class="sidebar">
+        <h1>searchbar</h1>
+        <input id="searchbar" onfocus="if (!document.getElementById('autosearch').checked) document.querySelector('footer').classList.add('showing')" onblur="document.querySelector('footer').classList.remove('showing')">
+        <br>
+    </div>
+    <div class="results_container" style="visibility: hidden; height: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; visibility: hidden;">
+    </div>
+</body>
+<footer>
+    <p>Press Enter to get results</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="main.js"></script>
+</html>

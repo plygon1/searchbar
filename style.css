@@ -85,7 +85,7 @@ ul {
 
 li {
     display: flex;
-    justify-content: center;   
+    justify-content: start;   
 }
 
 span {
@@ -167,4 +167,18 @@ footer {
 
 .results>* {
     user-select: none;
+}
+
+.loading {
+    color: gray;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 10px;
+}
+.loading>img {
+    width: 40px;
+    height: 40px;
+    padding-right: 7px;
 }

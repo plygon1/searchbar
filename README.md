@@ -9,6 +9,6 @@ but it works
 
 the use case is when you want to search tags using the searchbar but you dont actually want to open the green site
 
-(actively updating rn)
+12/26/25: added gelbooru support and also support for the search of multiple simultaneous sites
 
 [click this button to use it](https://plygon1.github.io/searchbar)

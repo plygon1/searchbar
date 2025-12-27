@@ -13,11 +13,12 @@
     <button onclick="$('.settings').toggleClass('settings-showing')"><span>Settings</span></button>
     <ul class="settings">
         <li><p>automatically search?<gap/><input id="autosearch" type="checkbox"></p></li>
-        <li><p>sites to include results of?</p><select multiple id="sitesincluded"> <!--the "sbid" identifies each option while letting the inner text be changed-->
-            <option selected sbid="xxx">rule34.xxx (tags are xxx:tag, <i>limit is always 10</i>)</option> <!--i applaud whoever made this site because holy the api is so clean-->
-            <option selected sbid="gel">gelbooru.com (tags are gel:tag)</option> <!--runs on the same software as rule34.xxx, shouldnt be too hard  edit: omg its easier than rule34.xxx-->
+        <li><p>sites to include results of?</p><gap/><select multiple id="sitesincluded"> <!--the "id" identifies each option while letting the inner text be changed-->
+            <option selected id="xxx">rule34.xxx (tags are xxx:tag, <i>limit is always 10</i>)</option> <!--i applaud whoever made this site because holy the api is so clean-->
+            <option selected id="gel">gelbooru.com (tags are gel:tag)</option> <!--runs on the same software as rule34.xxx, shouldnt be too hard  edit: omg its easier than rule34.xxx-->
         </select></li>
-        <li><p>search result limits for <i>every individual site</i>?</p><input type="number" value="10" id="limit"></li>
+        <li><p>search result limits for <i>every individual site</i>?</p><gap/><input type="number" value="10" id="limit"></li>
+        <li><p>combine tags?</p><gap/><input id="combinetags" type="checkbox"></li>
     </ul>
 </header>
 <body>
@@ -26,6 +27,7 @@
         <input id="searchbar" onfocus="if (!document.getElementById('autosearch').checked) document.querySelector('footer').classList.add('showing')" onblur="document.querySelector('footer').classList.remove('showing')">
         <br>
     </div>
+    <h3 class="loading" style="opacity: 0; height: 0px;"><img src="loading.gif">loading...</h3>
     <div class="results_container" style="visibility: hidden; height: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; visibility: hidden;">
     </div>
 </body>

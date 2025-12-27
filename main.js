@@ -141,24 +141,44 @@ var talkers = {
         }
         return out;
     },
-    gel: async(query) => {
-        var res = await fetch("https://gelbooru.com/index.php?page=autocomplete2&type=tag_query&limit="+(new String($("#limit").val()))+"&term="+query);
+    gel: async(query) => { // i made a cloudflare worker just for you all ^^
+        var res = await fetch("https://searchbar-proxy.searchbarproxy.workers.dev?q="+query);
         var json = await res.json();
         console.log(json);
-        var out = [];
-        for (let thing of json) {
-            out.push({name:"gel:"+thing.value,count:thing.post_count});
-        }
-        return out;
+        if (!json.tag) { return []; }
+        json.tag.forEach((e,i) => {
+            json.tag[i].name = "gel:"+e.name;
+        });
+        return json.tag; // somehow the name and count match up with the searchbar format perfectly, tysm gelbooru
     }
 };
 
 async function talk_to_r34(query) {
-    var out = [];
-    Array.from($("#sitesincluded").selectedOptions).map(option => option.sbid).forEach(async e=>{
+    let out = [];
+    for (let e of Array.from(document.querySelector("#sitesincluded").selectedOptions).map(option => option.id)) {
         let result = await talkers[e](query);
         out = out.concat(result);
-    });
+    }
+    if (document.getElementById('combinetags').checked) {
+        const grouped = {};
+
+        for (const { name, count } of out) {
+            const [prefix, type] = name.split(":");
+
+            if (!grouped[type]) {
+                grouped[type] = { prefixes: [], count: 0 };
+            }
+
+            grouped[type].prefixes.push(prefix);
+            grouped[type].count += parseInt(count);
+        }
+
+        out = Object.entries(grouped).map(([type, data]) => ({
+            name: `${data.prefixes.join("+")}:${type}`,
+            count: data.count.toString()
+        }));
+
+    }
     return out;
 }
 
@@ -175,12 +195,16 @@ $("#searchbar").on("input",async e=>{
 $("#searchbar").on("keydown",async e=>{
     if (!document.getElementById('autosearch').checked) {
         if (e.key == "Enter") {
+            $(".loading").animate({ height: 38, opacity: 1 });
             let data = await talk_to_r34($("#searchbar").val());
             let container = $(".results_container");
             if (container.css("visibility") == "hidden") {
-                automatic_set(data);
-                expand_container(container);
+                $(".loading").animate({ height: 0, opacity: 0 },300,"swing",function(){
+                    automatic_set(data);
+                    expand_container(container);
+                });
             } else {
+                $(".loading").animate({ height: 0, opacity: 0 },300,"swing");
                 manual_set(data);
             }
         }

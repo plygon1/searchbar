@@ -130,14 +130,35 @@ function automatic_set(res) {
     container.append(results);
 }
 
-async function talk_to_r34(query) {
-    var res = await fetch("https://api.rule34.xxx/autocomplete.php?q="+query);
-    var json = await res.json();
-    console.log(json);
-    var out = [];
-    for (let thing of json) {
-        out.push({name:thing.value,count:thing.label.slice(thing.value.length+2, -1)});
+var talkers = {
+    xxx: async(query) => {
+        var res = await fetch("https://api.rule34.xxx/autocomplete.php?q="+query);
+        var json = await res.json();
+        console.log(json);
+        var out = [];
+        for (let thing of json) {
+            out.push({name:"xxx:"+thing.value,count:thing.label.slice(thing.value.length+2, -1)});
+        }
+        return out;
+    },
+    gel: async(query) => {
+        var res = await fetch("https://gelbooru.com/index.php?page=autocomplete2&type=tag_query&limit="+(new String($("#limit").val()))+"&term="+query);
+        var json = await res.json();
+        console.log(json);
+        var out = [];
+        for (let thing of json) {
+            out.push({name:"gel:"+thing.value,count:thing.post_count});
+        }
+        return out;
     }
+};
+
+async function talk_to_r34(query) {
+    var out = [];
+    Array.from($("#sitesincluded").selectedOptions).map(option => option.sbid).forEach(async e=>{
+        let result = await talkers[e](query);
+        out = out.concat(result);
+    });
     return out;
 }
 
